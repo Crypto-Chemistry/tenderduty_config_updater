@@ -1,0 +1,11 @@
+[Unit]
+Description=Tenderduty Config Updater
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=$USER
+Group=$USER
+ExecStart=/home/relyte/tenderduty_config_updater/tenderduty_config_updater.sh
+[Install]
+WantedBy=multi-user.target
