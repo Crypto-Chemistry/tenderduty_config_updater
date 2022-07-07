@@ -4,8 +4,9 @@ Wants=network-online.target
 After=network-online.target
 
 [Service]
-User=$USER
-Group=$USER
-ExecStart=/home/relyte/tenderduty_config_updater/tenderduty_config_updater.sh
+User=USER
+Group=GROUP
+ExecStart=/home/user/tenderduty_config_updater/tenderduty_config_updater.sh
+
 [Install]
 WantedBy=multi-user.target
