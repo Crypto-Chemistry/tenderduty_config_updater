@@ -37,10 +37,11 @@ Now that the repo is configured, the Tenderduty server will need to be configure
 - If the private tenderduty configuration uses an environment variable for the pagerduty API key, add it as a service override by doing the following
 	- `sudo systemctl edit tenderduty_config_updater.service`
 	- Add the following line to the override file. replacing the variable name and value according to your config:
-		- ```
+		- 
+		```
 		[Service]
 		Environment="PAGERDUTY_API_KEY_VARIABLE_NAME=api_string"
-
+		```
 - Enable the timer and service
 	- `sudo systemctl enable tenderduty_config_updater.service`
 	- `sudo systemctl enable tenderduty_config_updater.timer`
