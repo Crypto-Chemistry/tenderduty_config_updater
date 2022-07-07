@@ -11,7 +11,7 @@ On the Linux system that will be pulling the config, an SSH key will need to be 
 
 `ssh-keygen -t ed25519`
 
-When prompted, enter the path for the key. For ease of use, I've chosen to use the default keyname. When prompted for a password on the SSH key, this is an important choice for how this workflow will need to be set up. Because this SSH key will only have Read access of the repo, I have not password protected the SSH key. As such, this SSH key should ONLY be used to read the private repo. Given more time, I plan on adding a password to the SSH key, but it will require more work to get setup.
+When prompted, enter the path for the key. For ease of use, I've chosen to use the default keyname. When prompted for a password on the SSH key, this is an important choice for how this workflow will need to be set up. Because this SSH key will only have read access of the repo, I have not password protected the SSH key. As such, this SSH key should ONLY be used to read the private repo. Given more time, I plan on adding a password to the SSH key, but it will require more work to get setup.
 
 Now that the key is generated, copy the contents of the PUBLIC key to the GitHub Deploy key window. Because this key is not password protected, DO NOT allow write access. Once completed, hit "Add key" to add this deploy key to the repo.
 
@@ -19,23 +19,28 @@ Now that the key is generated, copy the contents of the PUBLIC key to the GitHub
 Now that the repo is configured, the Tenderduty server will need to be configured.
 
 - Pull the public repo containing the scripts/services needed to update the config
-	- `git clone https://github.com/Crypto-Chemistry/tenderduty-config-updater.git`
+	- `git clone https://github.com/Crypto-Chemistry/tenderduty_config_updater.git`
 - Pull the private repo containing the Tenderduty config
-	- `cd $HOME/.config && git clone $repo_url tenderduty_config`
 	- If `$HOME/.config` does not exist, first create it with `mkdir $HOME/.config`
+	- `cd $HOME/.config && git clone $repo_url tenderduty_config`
+- Switch directories to the tenderduty_config_updater repo
+	- `cd $HOME/tenderduty_config_updater/`
 - Edit the `tenderduty_config_updater.sh` script to use the proper TENDERDUTY_DIR (`/home/user_name/tenderduty`) and CONFIG_DIR (`/home/user_name/.config/tenderduty_config`) for your system. 
 - Edit the `tenderduty_config_updater.service` script:
 	-  Set the User and Group for the service to run as
 	- Set the path to the `tenderduty_config_updater.sh` script in `ExecStart` 
+- Set permissions on the `tenderduty_config_updater.sh` script
+	- `chmod 700 `
 - Copy the service and timer to systemd's service directory
-	- `sudo ln -s /home/user_name/tenderduty-config-updater/tenderduty_config_updater.service /etc/systemd/system/tenderduty_config_updater.service`
-	- `sudo ln -s /home/user_name/tenderduty-config-updater/tenderduty_config_updater.timer /etc/systemd/system/tenderduty_config_updater.timer`
+	- `sudo ln -s /home/user_name/tenderduty_config_updater/tenderduty_config_updater.service /etc/systemd/system/tenderduty_config_updater.service`
+	- `sudo ln -s /home/user_name/tenderduty_config_updater/tenderduty_config_updater.timer /etc/systemd/system/tenderduty_config_updater.timer`
 - If the private tenderduty configuration uses an environment variable for the pagerduty API key, add it as a service override by doing the following
 	- `sudo systemctl edit tenderduty_config_updater.service`
 	- Add the following line to the override file. replacing the variable name and value according to your config:
-		```
+		- ```
 		[Service]
 		Environment="PAGERDUTY_API_KEY_VARIABLE_NAME=api_string"
+
 - Enable the timer and service
 	- `sudo systemctl enable tenderduty_config_updater.service`
 	- `sudo systemctl enable tenderduty_config_updater.timer`

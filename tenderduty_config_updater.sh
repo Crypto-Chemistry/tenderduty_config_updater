@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 TENDERDUTY_DIR="/home/user/tenderduty"
-CONFIG_DIR="/home/user/.config/tenderduty-config"
+CONFIG_DIR="/home/user/.config/tenderduty_config"
 #Check if an update is needed
 cd $CONFIG_DIR
 git remote update
