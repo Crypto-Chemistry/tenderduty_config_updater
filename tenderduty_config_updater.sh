@@ -13,7 +13,7 @@ if [[ $(git status -uno | grep "behind 'origin/main'") ]]; then
 
     #Restart tenderduty
     cd "$TENDERDUTY_DIR"
-    docker-compose down
+    docker-compose down --remove-orphans
     docker-compose up -d
 
     #Implement check to see if restart fails
